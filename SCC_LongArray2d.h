@@ -38,7 +38,7 @@ using namespace std;
 #include <iostream>
 #include <cstdio>
 #else
-#define _NDEBUG
+#define NDEBUG
 #endif
 #include <cassert>
 
