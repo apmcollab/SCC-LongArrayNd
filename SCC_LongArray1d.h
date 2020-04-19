@@ -33,13 +33,13 @@
 #include <cmath>
 #include <functional>
 #include <iostream>
-using namespace std;
 
 #ifdef  _DEBUG
-#include <iostream>
 #include <cstdio>
 #else
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 #endif
 #include <cassert>
 
@@ -69,7 +69,7 @@ class LongArray1d
     LongArray1d(const LongArray1d& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Standard Copy " << endl;
+      std::cout << "Standard Copy " << std::endl;
       #endif
 
       if(V.dataPtr == nullptr)
@@ -87,7 +87,7 @@ class LongArray1d
     LongArray1d(LongArray1d&& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Move Copy " << endl;
+      std::cout << "Move Copy " << std::endl;
       #endif
 
       dataPtr      = V.dataPtr;
@@ -165,7 +165,7 @@ class LongArray1d
     LongArray1d& operator=(const LongArray1d& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Standard Assignment" << endl;
+      std::cout << "Standard Assignment" << std::endl;
       #endif
 
       if (this != &V)
@@ -197,7 +197,7 @@ class LongArray1d
 	LongArray1d& operator=(LongArray1d&& V)
 	{
     #ifdef _VERBOSE_OPS_
-    cout << "Move Assignment" << endl;
+    std::cout << "Move Assignment" << std::endl;
     #endif
 
 	if((dataPtr == nullptr)&&(V.dataPtr != nullptr))
@@ -257,6 +257,36 @@ class LongArray1d
 #endif
 
 
+/*!  Sets all values of the vector to d. */
+
+    void setToValue(long d)
+    {
+	for(long i = 0; i < index1Size; i++)
+	{dataPtr[i] =  d;}
+    }
+
+    void addValue(long d)
+	{
+	for(long i = 0; i < index1Size; i++)
+	{dataPtr[i] += d;}
+	}
+
+
+ /*!  Outputs vector values to a stream. */
+
+friend std::ostream& operator<<(std::ostream& outStream, const LongArray1d& V)
+{
+
+	    long i;
+	    for(i = 0; i <  V.index1Size; i++)
+	    {
+	      outStream << V(i) << " ";
+	      outStream << std::endl;
+	    }
+	    return outStream;
+}
+
+
     long getSize()         const {return index1Size;}
     long getIndex1Size()  const {return index1Size;}
 
@@ -276,8 +306,8 @@ class LongArray1d
         {
         if((i < begin)||(i  > end))
         {
-        cerr << "SCC::LongArray1d index " << coordinate << " out of bounds " << endl;
-        cerr << "Offending index value : " << i << " Acceptable Range [" << begin << "," << end << "]" << endl;
+        std::cerr << "SCC::LongArray1d index " << coordinate << " out of bounds " << std::endl;
+        std::cerr << "Offending index value : " << i << " Acceptable Range [" << begin << "," << end << "]" << std::endl;
         return false;
         }
         return true;
@@ -291,7 +321,7 @@ class LongArray1d
     {
     if(size1 != size2)
     {
-    cerr << "SCC::LongArray1d sizes are incompatible : " << size1 << " != " << size2;
+    std::cerr << "SCC::LongArray1d sizes are incompatible : " << size1 << " != " << size2;
     return false;
     }
     return true;
@@ -301,7 +331,7 @@ class LongArray1d
     {
     if(size1 != size2)
     {
-    cerr << "SCC::LongArray1d sizes are incompatible : " << size1 << " != " << size2;
+    std::cerr << "SCC::LongArray1d sizes are incompatible : " << size1 << " != " << size2;
     return false;
     }
     return true;

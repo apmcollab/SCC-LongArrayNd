@@ -33,15 +33,14 @@
 #include <cstdlib>
 #include <iostream>
 #include <cstring>
-using namespace std;
-
 
 
 #ifdef  _DEBUG
-#include <iostream>
 #include <cstdio>
 #else
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 #endif
 #include <cassert>
 
@@ -75,7 +74,7 @@ class LongArray3d
    LongArray3d(const LongArray3d& V)
    {
       #ifdef _VERBOSE_OPS_
-      cout << "Standard Copy " << endl;
+      std::cout << "Standard Copy " << std::endl;
       #endif
 
       if(V.dataPtr == nullptr) {dataPtr = nullptr; index1Size = 0; index2Size = 0; index3Size = 0; return;}
@@ -95,7 +94,7 @@ class LongArray3d
     LongArray3d(LongArray3d&& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Move Copy " << endl;
+      std::cout << "Move Copy " << std::endl;
       #endif
 
       dataPtr      = V.dataPtr;
@@ -192,7 +191,7 @@ class LongArray3d
     LongArray3d& operator=(const LongArray3d& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Standard Assignment" << endl;
+      std::cout << "Standard Assignment" << std::endl;
       #endif
 
       if (this != &V)
@@ -229,7 +228,7 @@ class LongArray3d
 	LongArray3d& operator=(LongArray3d&& V)
 	{
     #ifdef _VERBOSE_OPS_
-    cout << "Move Assignment" << endl;
+    std::cout << "Move Assignment" << std::endl;
     #endif
 
 	if((dataPtr == nullptr)&&(V.dataPtr != nullptr))
@@ -328,6 +327,31 @@ virtual long getDimension()
 #endif
 
 
+
+/*!  Outputs the vector values to a stream z-slices and using first quadrant indexing for (i,j);  (i,j) = (0,0) in lower left corner. */
+
+    friend std::ostream& operator<<(std::ostream& outStream, const LongArray3d&V )
+    {
+            long i; long j; long k;
+
+            for(k = 0; k < V.index3Size; k++)
+            {
+            for(j = V.index2Size-1; j >= 0; j--)
+            {
+            for(i = 0; i <  V.index1Size; i++)
+            {
+              outStream <<  V(i,j,k) << " ";
+            }
+            outStream << std::endl;
+            }
+            outStream << std::endl << std::endl << std::endl;
+            }
+            return outStream;
+    }
+
+
+
+
     long getIndex1Size()  const {return index1Size;}
     long getIndex2Size()  const {return index2Size;}
     long getIndex3Size()  const {return index3Size;}
@@ -351,8 +375,8 @@ virtual long getDimension()
         {
         if((i < begin)||(i  > end))
         {
-        cerr << "SCC::LongArray3d index " << coordinate << " out of bounds " << endl;
-        cerr << "Offending index value : " << i << " Acceptable Range [" << begin << "," << end << "]" << endl;
+        std::cerr << "SCC::LongArray3d index " << coordinate << " out of bounds " << std::endl;
+        std::cerr << "Offending index value : " << i << " Acceptable Range [" << begin << "," << end << "]" << std::endl;
         return false;
         }
         return true;
@@ -366,7 +390,7 @@ virtual long getDimension()
     {
     if(size1 != size2)
     {
-    cerr << "SCC::LongArray3d sizes are incompatible : " << size1 << " != " << size2;
+    std::cerr << "SCC::LongArray3d sizes are incompatible : " << size1 << " != " << size2;
     return false;
     }
     return true;
@@ -376,7 +400,7 @@ virtual long getDimension()
     {
     if(size1 != size2)
     {
-    cerr << "SCC::LongArray3d sizes are incompatible : " << size1 << " != " << size2;
+    std::cerr << "SCC::LongArray3d sizes are incompatible : " << size1 << " != " << size2;
     return false;
     }
     return true;

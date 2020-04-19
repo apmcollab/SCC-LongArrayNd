@@ -32,13 +32,13 @@
 #include <cstdlib>
 #include <functional>
 #include <iostream>
-using namespace std;
 
 #ifdef  _DEBUG
-#include <iostream>
 #include <cstdio>
 #else
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 #endif
 #include <cassert>
 
@@ -70,7 +70,7 @@ class LongArray2d
    LongArray2d(const LongArray2d& V)
    {
       #ifdef _VERBOSE_OPS_
-      cout << "Standard Copy " << endl;
+      std::cout << "Standard Copy " << std::endl;
       #endif
 
       if(V.dataPtr == nullptr) {dataPtr = nullptr; index1Size = 0; index2Size = 0; return;}
@@ -88,7 +88,7 @@ class LongArray2d
     LongArray2d(LongArray2d&& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Move Copy " << endl;
+      std::cout << "Move Copy " << std::endl;
       #endif
 
       dataPtr      = V.dataPtr;
@@ -175,7 +175,7 @@ class LongArray2d
     LongArray2d& operator=(const LongArray2d& V)
     {
       #ifdef _VERBOSE_OPS_
-      cout << "Standard Assignment" << endl;
+      std::cout << "Standard Assignment" << std::endl;
       #endif
 
       if (this != &V)
@@ -209,7 +209,7 @@ class LongArray2d
 	LongArray2d& operator=(LongArray2d&& V)
 	{
     #ifdef _VERBOSE_OPS_
-    cout << "Move Assignment" << endl;
+    std::cout << "Move Assignment" << std::endl;
     #endif
 
 	if((dataPtr == nullptr)&&(V.dataPtr != nullptr))
@@ -303,6 +303,24 @@ virtual long getDimension()
     };
 #endif
 
+/*!  Outputs the vector values to a stream using first quadrant indexing: (i,j) = (0,0) in lower left corner. */
+
+friend std::ostream& operator<<(std::ostream& outStream, const LongArray2d&V )
+{
+        long i; long j;
+
+        for(j = V.index2Size-1; j >= 0; j--)
+        {
+        for(i = 0; i <  V.index1Size; i++)
+        {
+          outStream << V(i,j) << " ";
+        }
+        outStream << std::endl;
+        }
+        return outStream;
+}
+
+
 
     long getIndex1Size()  const {return index1Size;}
     long getIndex2Size()  const {return index2Size;}
@@ -325,8 +343,8 @@ virtual long getDimension()
         {
         if((i < begin)||(i  > end))
         {
-        cerr << "SCC::LongArray2d index " << coordinate << " out of bounds " << endl;
-        cerr << "Offending index value : " << i << " Acceptable Range [" << begin << "," << end << "]" << endl;
+        std::cerr << "SCC::LongArray2d index " << coordinate << " out of bounds " << std::endl;
+        std::cerr << "Offending index value : " << i << " Acceptable Range [" << begin << "," << end << "]" << std::endl;
         return false;
         }
         return true;
@@ -340,7 +358,7 @@ virtual long getDimension()
     {
     if(size1 != size2)
     {
-    cerr << "SCC::LongArray2d sizes are incompatible : " << size1 << " != " << size2;
+    std::cerr << "SCC::LongArray2d sizes are incompatible : " << size1 << " != " << size2;
     return false;
     }
     return true;
@@ -350,7 +368,7 @@ virtual long getDimension()
     {
     if(size1 != size2)
     {
-    cerr << "SCC::LongArray2d sizes are incompatible : " << size1 << " != " << size2;
+    std::cerr << "SCC::LongArray2d sizes are incompatible : " << size1 << " != " << size2;
     return false;
     }
     return true;
