@@ -43,10 +43,10 @@
 #endif
 #include <cassert>
 
-#undef _VERBOSE_OPS_
+#undef VERBOSE_OPS
 
-#ifndef _SCC_LongArray1d_
-#define _SCC_LongArray1d_
+#ifndef SCC_LONG_ARRAY_1D_
+#define SCC_LONG_ARRAY_1D_
 
 namespace SCC
 {
@@ -68,7 +68,7 @@ class LongArray1d
 
     LongArray1d(const LongArray1d& V)
     {
-      #ifdef _VERBOSE_OPS_
+      #ifdef VERBOSE_OPS
       std::cout << "Standard Copy " << std::endl;
       #endif
 
@@ -86,7 +86,7 @@ class LongArray1d
 
     LongArray1d(LongArray1d&& V)
     {
-      #ifdef _VERBOSE_OPS_
+      #ifdef VERBOSE_OPS
       std::cout << "Move Copy " << std::endl;
       #endif
 
@@ -164,7 +164,7 @@ class LongArray1d
 
     LongArray1d& operator=(const LongArray1d& V)
     {
-      #ifdef _VERBOSE_OPS_
+      #ifdef VERBOSE_OPS
       std::cout << "Standard Assignment" << std::endl;
       #endif
 
@@ -196,7 +196,7 @@ class LongArray1d
 
 	LongArray1d& operator=(LongArray1d&& V)
 	{
-    #ifdef _VERBOSE_OPS_
+    #ifdef VERBOSE_OPS
     std::cout << "Move Assignment" << std::endl;
     #endif
 
