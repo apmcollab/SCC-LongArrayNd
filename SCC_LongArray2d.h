@@ -355,7 +355,7 @@ friend std::ostream& operator<<(std::ostream& outStream, const LongArray2d&V )
 #endif
 
 #ifdef _DEBUG
-    bool sizeCheck(long size1, long size2, int coordinate)
+    bool sizeCheck(long size1, long size2, int /* coordinate */)
     {
     if(size1 != size2)
     {
@@ -365,7 +365,7 @@ friend std::ostream& operator<<(std::ostream& outStream, const LongArray2d&V )
     return true;
     }
 
-    bool sizeCheck(long size1, long size2, int coordinate) const
+    bool sizeCheck(long size1, long size2, int /* coordinate */) const
     {
     if(size1 != size2)
     {
